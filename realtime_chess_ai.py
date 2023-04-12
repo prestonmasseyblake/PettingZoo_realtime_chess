@@ -4,6 +4,7 @@
 Created on Mon Feb 27 14:03:57 2023
 
 @author: zc
+@author: prestonblake
 """
 
 import classic.chess_rt as chess
@@ -11,6 +12,9 @@ import numpy as np
 import uuid
 import json
 import requests
+import gym
+import gym_chess
+import random
 
 #GLOBAL VARIABLES 
 API_URL = "http://localhost:8000/upload/"
@@ -69,7 +73,10 @@ if __name__ == "__main__":
     obs = env.reset()
     games = 1
     count_down = 400
-    
+    # added from the open ai 
+    g_env = gym.make('Chess-v0')
+    print("this is g env",g_env.render())
+    # end of added from the open ai 
     for agent in env.agent_iter():
         print("this is the agent",agent)
         env.unwrapped.set_color(agent)
@@ -105,6 +112,7 @@ if __name__ == "__main__":
         if not agent in hash_map:
 
             # Filter out invalid actions
+            # needs to get replaced  arg max statement, 
             valid_actions = np.where(np.array(observation["action_mask"]) == 1)[0]
             """
             TODO: Model training
@@ -133,7 +141,7 @@ if __name__ == "__main__":
         print(env.render())
         print(type(env.render()))
         # comment out this line if you dont want to push to database
-        post_uuid_to_api(API_URL, tag, TIMER, env.render())
+        # post_uuid_to_api(API_URL, tag, TIMER, env.render())
         TIMER += 1
         print()
     
